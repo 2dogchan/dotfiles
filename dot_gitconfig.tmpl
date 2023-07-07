@@ -1,0 +1,78 @@
+[user]
+    name = "dc"
+    email = "2dogchan@gmail.com"
+[credential]
+    helper = store
+[include]
+    path = ~/.gitconfig.local
+[status]
+    submoduleSummary = true
+[commit]
+	# template = ~/.gitmessage
+[color]
+    ui = auto
+    status = auto
+    diff = auto
+    branch = auto
+    showBranch = auto
+    interactive = auto
+[core]
+    editor = nvim # "nvr --remote-wait-silent" # or nvim
+    excludesfile ="~/.gitignore"
+
+    pager = delta
+[format]
+    pretty = format:%C(yellow)%h %Cblue%>(15)%ad %Cgreen%<(15)%aN%Cred%d %Creset%s
+[alias]
+    sc = smart-checkout
+    pr = "!f() { git fetch upstream refs/pull/$1/head:pr/$1; } ; f"
+    fix='$EDITOR `git diff --name-only | uniq`'
+    # List all aliases. Stolen from here: https://twitter.com/TrevorBramble/status/774292970681937920
+    aliases = "!git config -l | grep ^alias | cut -c 7- | sort"
+    # Destroy all local changes and reset to HEAD.
+    fuckit = reset --hard HEAD
+    fall = fetch --all
+    # Reset previous commit, but keep all the associated changes. Useful for avoiding nasty git merge commits.
+    uncommit = reset --soft HEAD^
+    reset-up = reset --hard $(git upstream)
+    sl = log --decorate -20
+    ll = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
+    new = checkout -b
+[diff]
+    colorMoved = default
+    navigate = true # use n and N to move between diff sections
+[delta]
+    features = line-numbers decorations
+    # hyperlinks = true NOTE: this breaks inside neovim
+[delta "decorations"]
+    commit-decoration-style = bold yellow box ul
+    file-style = bold yellow ul
+[interactive]
+    diffFilter = delta --color-only
+[push]
+    default = current
+[push]
+    followTags = true
+[pull]
+    rebase = true
+[rebase]
+    autoStash = true
+[fetch]
+    prune = true
+[gitsh]
+    prompt = "\n%D %c(%b%#)%w ➜"
+[rerere]
+    enabled = true
+[hub]
+    protocol = ssh
+[init]
+    defaultBranch = main
+# [url "ssh://git@github.com/"]
+#     insteadOf = https://github.com/
+[http]
+    postbuffer = 157286400
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
