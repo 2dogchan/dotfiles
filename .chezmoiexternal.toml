@@ -1,0 +1,6 @@
+# nvim仓库
+[".config/nvim"]
+	type = "git-repo"
+	url = "git@github.com:2dogchan/lazy-nvim-ide.git"
+	[".config/nvim".pull]
+		args = ["--ff-only"]
