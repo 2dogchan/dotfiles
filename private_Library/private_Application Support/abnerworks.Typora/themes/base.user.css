@@ -1,0 +1,7 @@
+body {
+  font-family: "JetBrainsMonoNL Nerd Font Mono";
+}
+
+#write .CodeMirror-wrap .CodeMirror-code pre {
+    font-family: "JetBrainsMonoNL Nerd Font Mono"
+}

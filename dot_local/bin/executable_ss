@@ -1,0 +1,47 @@
+#!/bin/sh
+
+# 报错之后下面的逻辑不再继续执行了
+set -e
+
+DIR="$HOME/.ssh/connections"
+
+# 检查目录是否存在
+if [ ! -d "$DIR" ]; then
+  echo "目录不存在: $DIR"
+  echo "请先创建目录并添加连接脚本"
+  exit 0
+fi
+
+# 找到需要expect脚本所在的路径
+for arg in "$@"
+do
+  DIR+="/"$arg
+done
+
+show()
+{
+  if [[ -z $(ls $LS_FILES) ]]; then
+    echo "no such scripts"
+    exit 0
+  fi
+
+  # 过滤出需要执行的脚本
+  FILE_NAME=$(ls $DIR | gum filter --indicator=" ◉ ")
+
+  if [[ -z $FILE_NAME ]]; then
+    # echo "Quit"
+    exit 0
+  fi
+
+  DIR+="/"$FILE_NAME
+}
+
+while [ -d $DIR ]; do
+  show
+done
+
+if file $DIR | grep -q "expect"; then
+  expect $DIR
+else
+  sh $DIR
+fi
