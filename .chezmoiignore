@@ -1,0 +1,12 @@
+README.md
+screenshot.png
+
+{{ if ne .chezmoi.os "darwin" -}}
+
+# Brewfile
+.config/Brewfile
+
+# Typora字体配置
+Library/Application Support/abnerworks.Typora/themes/base.user.css
+
+{{- end }}
