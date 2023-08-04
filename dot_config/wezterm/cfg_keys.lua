@@ -163,6 +163,9 @@ cfg.keys = {
 	keybind(mods.MS, { "j", "DownArrow" }, act.AdjustPaneSize({ "Down", 5 })),
 	keybind(mods.MS, { "k", "UpArrow" }, act.AdjustPaneSize({ "Up", 5 })),
 	keybind(mods.MS, { "l", "RightArrow" }, act.AdjustPaneSize({ "Right", 5 })),
+
+	-- Pass keys to nvim
+	keybind(mods.M, { "s" }, act({ SendString = "\x13" })),
 }
 
 -- Events related to config reloading
