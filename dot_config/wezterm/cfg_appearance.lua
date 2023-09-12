@@ -16,8 +16,8 @@ cfg.window_padding = {
 
 cfg.inactive_pane_hsb = {
 	-- NOTE: these values are multipliers, applied on normal pane values
-	saturation = 0.8,
-	brightness = 0.7,
+	-- saturation = 0.8,
+	-- brightness = 0.7,
 }
 
 cfg.colors = {

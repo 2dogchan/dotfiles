@@ -2,9 +2,9 @@
 # ALIASES
 #------------------------------------------------------------------------------
 alias ls="ls --color=auto --hyperlink=auto $@"
-if [[ $+commands[exa] ]]; then
-  alias ls="exa"
-  alias l="exa --long --icons --all --git --color=always --group-directories-first --icons $@"
+if [[ $+commands[eza] ]]; then
+  alias ls="eza"
+  alias l="eza --long --icons --all --git --color=always --group-directories-first --icons $@"
   alias ll=l
 else
   alias l='ls -lFh'     # size,show type,human readable

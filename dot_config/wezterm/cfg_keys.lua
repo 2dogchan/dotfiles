@@ -157,6 +157,8 @@ cfg.keys = {
 	keybind(mods.M, { "k", "UpArrow" }, act.ActivatePaneDirection("Up")),
 	keybind(mods.M, { "l", "RightArrow" }, act.ActivatePaneDirection("Right")),
 	keybind(mods.MS, "Space", act.TogglePaneZoomState),
+	keybind(mods.M, "r", act.RotatePanes("Clockwise")),
+	keybind(mods.MS, "r", act.RotatePanes("CounterClockwise")),
 
 	-- Adjust Pane Size
 	keybind(mods.MS, { "h", "LeftArrow" }, act.AdjustPaneSize({ "Left", 5 })),
