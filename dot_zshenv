@@ -74,7 +74,13 @@ ${XDG_DATA_HOME}/bob/nvim-bin(N-/)
 
 case `uname` in
 	Darwin)
-		export ANDROID_SDK_ROOT=${HOME}/Library/Android/sdk/
+		export ANDROID_SDK_ROOT=/opt/homebrew/share/android-commandlinetools
+		export ANDROID_HOME=$ANDROID_SDK_ROOT
+		path+=(
+			${ANDROID_SDK_ROOT}/emulator(N-/)
+			${ANDROID_SDK_ROOT}/platform-tools(N-/)
+			${ANDROID_SDK_ROOT}/cmdline-tools/latest/bin(N-/)
+		)
 		;;
 	Linux)
 		# Java -----------------------------------------------------------------------
