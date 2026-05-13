@@ -82,14 +82,7 @@ cfg.keys = {
 	keybind(
 		mods.M,
 		"t",
-		act.PromptInputLine({
-			description = "Enter new name for tab",
-			action = wezterm.action_callback(function(window, pane, line)
-				if line then
-					window:active_tab():set_title(line)
-				end
-			end),
-		})
+		act.EmitEvent("tabs.manual-update-tab-title")
 	),
 
 	-- Font size

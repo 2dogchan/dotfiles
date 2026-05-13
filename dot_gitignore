@@ -72,6 +72,7 @@ _deps
 .ignore
 .fvm/
 .gonvim/
+.omc
 
 .ccls-cache/
 # vim:filetype=conf
