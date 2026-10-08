@@ -148,3 +148,6 @@ export FZF_TMUX_OPTS='-p80%,60%'
 export SPRING_PROFILES_ACTIVE='local'
 export KAFKA_BOOTSTRAP_SERVERS='localhost:9092'
 export LOG_PATH='./logs'
+
+# 机器本地的私密环境变量（API key 等），不进 dotfiles 仓库
+[ -f "$HOME/.zshenv.local" ] && source "$HOME/.zshenv.local"
