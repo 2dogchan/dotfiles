@@ -222,3 +222,11 @@ zle -N edit-command-line
 # bindkey -M vicmd vv edit-command-line
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+# bun completions
+[ -s "/Users/brando/.bun/_bun" ] && source "/Users/brando/.bun/_bun"
+
+. "$HOME/.local/share/../bin/env"
+
+# Pi
+export PATH="$HOME/.local/bin:$PATH"
