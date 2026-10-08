@@ -1,0 +1,3 @@
+# zsh reads $ZDOTDIR/.zshenv instead of ~/.zshenv once ZDOTDIR is exported (nested shells, nvim :terminal).
+# Delegate so the environment is identical either way.
+[ -f "$HOME/.zshenv" ] && source "$HOME/.zshenv"

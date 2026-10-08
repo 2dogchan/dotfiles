@@ -1,12 +1,10 @@
+# Files that live in the source repo but are never written to $HOME
 README.md
+LICENSE
 screenshot.png
+Brewfile
 
 {{ if ne .chezmoi.os "darwin" -}}
-
-# Brewfile
-.config/Brewfile
-
-# Typora字体配置
+# macOS only
 Library/Application Support/abnerworks.Typora/themes/base.user.css
-
 {{- end }}

@@ -1,153 +1,83 @@
 # vim:ft=zsh
-#-------------------------------------------------------------------------------
-#       ENV VARIABLES
-#-------------------------------------------------------------------------------
-# PATH.
-# (N-/): do not register if the directory does not exists
-# (Nn[-1]-/)
-#
-#  N   : NULL_GLOB option (ignore path if the path does not match the glob)
-#  n   : Sort the output
-#  [-1]: Select the last item in the array
-#  -   : follow the symbol links
-#  /   : ignore files
-#  t   : tail of the path
-# CREDIT: @ahmedelgabri
-#--------------------------------------------------------------------------------
+# Environment only. Read by EVERY zsh (login, interactive, scripts), so keep it cheap and side-effect free.
+#   interactive setup  → $ZDOTDIR/.zshrc  (+ conf.d/)
+#   login PATH tweaks that need Homebrew → $ZDOTDIR/.zprofile
+#   machine-local secrets → ~/.zshenv.local (not in the repo)
+
+typeset -U path   # keep PATH entries unique even when this file is sourced twice
+
+# ─── XDG + zsh home ────────────────────────────────────────────────────────────
 export XDG_CONFIG_HOME="$HOME/.config"
 export XDG_CACHE_HOME="$HOME/.cache"
 export XDG_DATA_HOME="$HOME/.local/share"
-
-# ZDOTDIR/.zshrc will be found and execute
 export ZDOTDIR="$XDG_CONFIG_HOME/zsh"
 export ZSH_CACHE_DIR="$XDG_CACHE_HOME/zsh"
-if [ ! -d "$ZSH_CACHE_DIR" ]; then
-	mkdir -p "$ZSH_CACHE_DIR"
-fi
+[ -d "$ZSH_CACHE_DIR" ] || mkdir -p "$ZSH_CACHE_DIR"
 
-export SYNC_DIR=${HOME}/Dropbox
-export PROJECTS_DIR=${HOME}/projects
-
-# # @see: https://github.com/BurntSushi/ripgrep/blob/master/GUIDE.md#configuration-file
-# if which rg >/dev/null; then
-# 	export RIPGREP_CONFIG_PATH=${DOTFILES}/.config/rg/.ripgreprc
-# fi
-
-# Added by n-install (see http://git.io/n-install-repo).
-if [ -d "$HOME/n" ]; then
-	export N_PREFIX="$HOME/n"; [[ :$PATH: == *":$N_PREFIX/bin:"* ]] || PATH+=":$N_PREFIX/bin"
-fi
-
-[ -f "$HOME/.cargo/env" ] && . "$HOME/.cargo/env"
-
-# NOTE: for signing commits with GPG (for work)
-export GPG_TTY=$(tty)
-
-#-------------------------------------------------------------------------------
-# Go
-#-------------------------------------------------------------------------------
+export PROJECTS_DIR="$HOME/projects"
 export BREW_HOME=/opt/homebrew
 
-#-------------------------------------------------------------------------------
-# Go
-#-------------------------------------------------------------------------------
-export GOPATH=$HOME/projects/golang
+# ─── Toolchains ────────────────────────────────────────────────────────────────
+export GOPATH="$HOME/projects/golang"
+export BUN_INSTALL="$HOME/.bun"
+[ -f "$HOME/.cargo/env" ] && . "$HOME/.cargo/env"
+# n (node version manager), only if installed
+if [ -d "$HOME/n" ]; then
+  export N_PREFIX="$HOME/n"
+fi
 
-#-------------------------------------------------------------------------------
-
+# ─── PATH  ((N-/) = add only if the directory exists) ──────────────────────────
 path+=(
-/usr/local/bin
-${HOME}/.npm/bin(N-/)
-${HOME}/.local/bin(N-/)
-# Dart -----------------------------------------------------------------------
-${HOME}/flutter/.pub-cache/bin(N-/)
-${HOME}/flutter/bin(N-/)
-${HOME}/.pub-cache/bin(N-/)
-# Golang ----------------------------------------------------------------------
-${GOPATH}/bin(N-/)
-# Mysql Client
-${BREW_HOME}/opt/mysql-client/bin(N-/)
-# Extra -----------------------------------------------------------------------
-${XDG_DATA_HOME}/bin(N-/)
-${XDG_DATA_HOME}/bob/nvim-bin(N-/)
+  /usr/local/bin
+  ${HOME}/.local/bin(N-/)
+  ${XDG_DATA_HOME}/bin(N-/)
+  ${HOME}/.npm/bin(N-/)
+  ${BUN_INSTALL}/bin(N-/)
+  ${N_PREFIX:+$N_PREFIX/bin}(N-/)
+  ${HOME}/.fzf/bin(N-/)
+  # Go / Dart / Flutter
+  ${GOPATH}/bin(N-/)
+  ${HOME}/.pub-cache/bin(N-/)
+  ${HOME}/flutter/bin(N-/)
+  ${HOME}/flutter/.pub-cache/bin(N-/)
+  # Homebrew extras
+  ${BREW_HOME}/opt/mysql-client/bin(N-/)
+  ${XDG_DATA_HOME}/bob/nvim-bin(N-/)
 )
 
-case `uname` in
-	Darwin)
-		export ANDROID_SDK_ROOT=/opt/homebrew/share/android-commandlinetools
-		export ANDROID_HOME=$ANDROID_SDK_ROOT
-		path+=(
-			${ANDROID_SDK_ROOT}/emulator(N-/)
-			${ANDROID_SDK_ROOT}/platform-tools(N-/)
-			${ANDROID_SDK_ROOT}/cmdline-tools/latest/bin(N-/)
-		)
-		;;
-	Linux)
-		# Java -----------------------------------------------------------------------
-		# Use Java 8 because -> https://stackoverflow.com/a/49759126
-		# ------------------------------------------------------------------------
-		export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
-		path+=(
-		${JAVA_HOME}/bin(N-/)
-	)
-	;;
+case "$(uname)" in
+  Darwin)
+    export ANDROID_SDK_ROOT=/opt/homebrew/share/android-commandlinetools
+    export ANDROID_HOME=$ANDROID_SDK_ROOT
+    path+=(
+      ${ANDROID_SDK_ROOT}/emulator(N-/)
+      ${ANDROID_SDK_ROOT}/platform-tools(N-/)
+      ${ANDROID_SDK_ROOT}/cmdline-tools/latest/bin(N-/)
+    )
+    ;;
+  Linux)
+    export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
+    path+=(${JAVA_HOME}/bin(N-/))
+    ;;
 esac
 
+# ─── Editor, pager, locale ─────────────────────────────────────────────────────
+export EDITOR="nvim"
+export VISUAL="nvim --cmd 'let g:flatten_wait=1'"
+export USE_EDITOR=$EDITOR
 export MANPATH="/usr/local/man:$MANPATH"
-if which nvim >/dev/null; then
-	export MANPAGER='nvim +Man!'
-fi
-
-# you may need to manually set your language environment
+(( $+commands[nvim] )) && export MANPAGER='nvim +Man!'
 export LC_ALL=zh_CN.UTF-8
 export LANG=zh_CN.UTF-8
+export GPG_TTY=$TTY
 
-# preferred editor for local and remote sessions
-export VISUAL="nvim --cmd 'let g:flatten_wait=1'"
-export EDITOR="nvim"
+# ─── Tool config files ─────────────────────────────────────────────────────────
+export RIPGREP_CONFIG_PATH="$XDG_CONFIG_HOME/rg/.ripgreprc"
 
-export USE_EDITOR=$EDITOR
-
-if [ -f "$HOME/.environment.secret.sh" ]; then
-	source $HOME/.environment.secret.sh
-fi
-
-if [ -f "$HOME/.environment.local.sh" ]; then
-	source $HOME/.environment.local.sh
-fi
-
-export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=241'
-
-#-------------------------------------------------------------------------------
-#  FZF Settings
-#-------------------------------------------------------------------------------
-# --files: List files that would be searched but do not search
-# --no-ignore: Do not respect .gitignore, etc...
-# --hidden: Search hidden files and folders
-export FZF_DEFAULT_COMMAND='rg --files --no-ignore-vcs --hidden'
-export FZF_DEFAULT_OPTS="--reverse \
-	--cycle \
-	--bind=esc:abort \
-	--height 60% \
-	--border sharp \
-	--prompt '∷ ' \
-	--marker ' '"
-	# --pointer ▶ "
-
-# CTRL-/ to toggle small preview window to see the full command
-# CTRL-Y to copy the command into clipboard using pbcopy
-export FZF_CTRL_R_OPTS="
---preview 'echo {}' --preview-window up:3:hidden:wrap
---bind 'ctrl-/:toggle-preview'
---bind 'ctrl-y:execute-silent(echo -n {2..} | pbcopy)+abort'
---color header:italic
---header 'Press CTRL-Y to copy command into clipboard'"
-
-export FZF_TMUX_OPTS='-p80%,60%'
-
+# ─── Project defaults (Java/Kafka local dev) ───────────────────────────────────
 export SPRING_PROFILES_ACTIVE='local'
 export KAFKA_BOOTSTRAP_SERVERS='localhost:9092'
 export LOG_PATH='./logs'
 
-# 机器本地的私密环境变量（API key 等），不进 dotfiles 仓库
+# ─── Machine-local secrets and overrides (API keys etc.), never committed ───────
 [ -f "$HOME/.zshenv.local" ] && source "$HOME/.zshenv.local"

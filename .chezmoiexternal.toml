@@ -1,7 +1,52 @@
-# nvim仓库
+# Things chezmoi downloads for us. Refreshed at most once a week; force with `chezmoi apply -R`.
+
+# Neovim config is its own repo
 [".config/nvim"]
-type = "git-repo"
-branch = "dev"
-url = "https://github.com/2dogchan/lazy-nvim-ide.git"
-[".config/nvim".pull]
-args = ["--ff-only"]
+    type = "git-repo"
+    url = "https://github.com/2dogchan/lazy-nvim-ide.git"
+    branch = "main"
+    [".config/nvim".pull]
+        args = ["--ff-only"]
+
+# zsh plugins (sourced by .config/zsh/conf.d/30-plugins.zsh). No git clones at shell start-up.
+[".config/zsh/plugins/zsh-syntax-highlighting"]
+    type = "archive"
+    url = "https://github.com/zsh-users/zsh-syntax-highlighting/archive/master.tar.gz"
+    exact = true
+    stripComponents = 1
+    refreshPeriod = "168h"
+
+[".config/zsh/plugins/zsh-autosuggestions"]
+    type = "archive"
+    url = "https://github.com/zsh-users/zsh-autosuggestions/archive/master.tar.gz"
+    exact = true
+    stripComponents = 1
+    refreshPeriod = "168h"
+
+[".config/zsh/plugins/zsh-completions"]
+    type = "archive"
+    url = "https://github.com/zsh-users/zsh-completions/archive/master.tar.gz"
+    exact = true
+    stripComponents = 1
+    refreshPeriod = "168h"
+
+[".config/zsh/plugins/zsh-autopair"]
+    type = "archive"
+    url = "https://github.com/hlissner/zsh-autopair/archive/master.tar.gz"
+    exact = true
+    stripComponents = 1
+    refreshPeriod = "168h"
+
+[".config/zsh/plugins/alias-tips"]
+    type = "archive"
+    url = "https://github.com/djui/alias-tips/archive/master.tar.gz"
+    exact = true
+    stripComponents = 1
+    refreshPeriod = "168h"
+
+[".config/zsh/plugins/zsh-auto-notify"]
+    type = "archive"
+    url = "https://github.com/MichaelAquilina/zsh-auto-notify/archive/master.tar.gz"
+    exact = true
+    stripComponents = 1
+    refreshPeriod = "168h"

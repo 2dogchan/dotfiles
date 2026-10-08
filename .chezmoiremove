@@ -1,0 +1,19 @@
+# Targets that moved or were retired; chezmoi deletes them on apply.
+.gitconfig
+.gitignore
+.gitmessage
+.config/Brewfile
+.config/kitty
+.config/zsh/plugins.zsh
+.config/zsh/scripts
+.config/wezterm/backdrops
+.config/wezterm/fonts
+.config/wezterm/lib
+.config/wezterm/vendor
+.config/wezterm/cfg_appearance.lua
+.config/wezterm/cfg_fonts.lua
+.config/wezterm/cfg_keys.lua
+.config/wezterm/cfg_mouse.lua
+.config/wezterm/cfg_ssh.lua
+.config/wezterm/on.lua
+.config/wezterm/config/bindings.lua

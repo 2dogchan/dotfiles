@@ -1,0 +1,71 @@
+[user]
+    name = "{{ .name }}"
+    email = "{{ .email }}"
+[include]
+    # machine-local overrides (work identity, signing key…), not in the repo
+    path = ~/.config/git/config.local
+[credential]
+    helper = store
+[credential "https://github.com"]
+    helper =
+    helper = !/opt/homebrew/bin/gh auth git-credential
+[credential "https://gist.github.com"]
+    helper =
+    helper = !/opt/homebrew/bin/gh auth git-credential
+[core]
+    editor = nvim
+    pager = delta
+    # global ignore defaults to ~/.config/git/ignore
+[init]
+    defaultBranch = main
+[commit]
+    # template = ~/.config/git/message
+[status]
+    submoduleSummary = true
+[color]
+    ui = auto
+[format]
+    pretty = format:%C(yellow)%h %Cblue%>(15)%ad %Cgreen%<(15)%aN%Cred%d %Creset%s
+[diff]
+    colorMoved = default
+    navigate = true
+[delta]
+    features = line-numbers decorations
+[delta "decorations"]
+    commit-decoration-style = bold yellow box ul
+    file-style = bold yellow ul
+[interactive]
+    diffFilter = delta --color-only
+[push]
+    default = current
+    followTags = true
+[pull]
+    rebase = true
+[rebase]
+    autoStash = true
+[fetch]
+    prune = true
+[rerere]
+    enabled = true
+[http]
+    postbuffer = 157286400
+[hub]
+    protocol = ssh
+[gitsh]
+    prompt = "\n%D %c(%b%#)%w ➜"
+[filter "lfs"]
+    clean = git-lfs clean -- %f
+    smudge = git-lfs smudge -- %f
+    process = git-lfs filter-process
+    required = true
+[alias]
+    sc = smart-checkout
+    pr = "!f() { git fetch upstream refs/pull/$1/head:pr/$1; } ; f"
+    aliases = "!git config -l | grep ^alias | cut -c 7- | sort"
+    fuckit = reset --hard HEAD
+    fall = fetch --all
+    uncommit = reset --soft HEAD^
+    reset-up = reset --hard $(git upstream)
+    sl = log --decorate -20
+    ll = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
+    new = checkout -b

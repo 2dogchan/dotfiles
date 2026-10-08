@@ -1,0 +1,9 @@
+{{ if eq .chezmoi.os "darwin" -}}
+#!/bin/bash
+# Runs whenever Brewfile changes (its hash is embedded below).
+# Brewfile hash: {{ include "Brewfile" | sha256sum }}
+set -uo pipefail
+command -v brew >/dev/null 2>&1 || { echo "brew not installed, skipping Brewfile"; exit 0; }
+echo "==> brew bundle (Brewfile changed)"
+brew bundle --file="{{ .chezmoi.sourceDir }}/Brewfile" --no-upgrade || echo "brew bundle finished with errors (see above)"
+{{ end -}}
