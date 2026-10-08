@@ -34,7 +34,6 @@ path+=(
   ${HOME}/.npm/bin(N-/)
   ${BUN_INSTALL}/bin(N-/)
   ${N_PREFIX:+$N_PREFIX/bin}(N-/)
-  ${HOME}/.fzf/bin(N-/)
   # Go / Dart / Flutter
   ${GOPATH}/bin(N-/)
   ${HOME}/.pub-cache/bin(N-/)
