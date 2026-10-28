@@ -39,11 +39,9 @@ brew "kubeseal"
 brew "lazygit"
 brew "librsvg"
 brew "lua"
-brew "luarocks"
 brew "mas"
 brew "maven"
 brew "mysql-client"
-brew "neofetch"
 brew "neovim"
 brew "nginx"
 brew "nmap"
@@ -66,20 +64,20 @@ brew "zoxide"
 brew "zsh"
 brew "hashicorp/tap/terraform", trusted: true
 brew "runpod/runpodctl/runpodctl", trusted: true
+brew "cargo-nextest"
+brew "herdr"
+brew "oxipng"
+brew "pngquant"
+brew "postgresql@16"
+brew "sccache"
+brew "tmux"
+brew "zig"
 cask "android-commandlinetools"
-cask "android-studio"
-cask "clash-party"
-cask "docker-desktop", args: { appdir: "/Applications" }
-cask "flutter"
 cask "font-fira-code"
 cask "font-jetbrains-mono-nerd-font"
 cask "fork"
 cask "iina"
 cask "orbstack"
 cask "tableplus"
-cask "visual-studio-code", args: { appdir: "/Applications" }
 cask "wezterm"
-mas "Slack", id: 803453959
 mas "Telegram", id: 747648890
-mas "Transocks", id: 1345035954
-mas "Windows App", id: 1295203466
