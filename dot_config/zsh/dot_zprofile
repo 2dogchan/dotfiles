@@ -1,15 +1,17 @@
-# Login shells only. Homebrew goes first because everything below depends on it.
-eval "$(/opt/homebrew/bin/brew shellenv)"
-export BREW_PREFIX="$HOMEBREW_PREFIX"
+# Login shells only. On macOS Homebrew goes first because everything below depends on it.
+if [[ -x /opt/homebrew/bin/brew ]]; then
+  eval "$(/opt/homebrew/bin/brew shellenv)"
+  export BREW_PREFIX="$HOMEBREW_PREFIX"
 
-# Prefer Homebrew ruby and GNU coreutils over the macOS ones
-path=(
-  "$BREW_PREFIX/opt/ruby/bin"
-  "$BREW_PREFIX/lib/ruby/gems/3.0.0/bin"
-  "$BREW_PREFIX/opt/coreutils/libexec/gnubin"
-  $path
-)
-export MANPATH="$BREW_PREFIX/opt/coreutils/libexec/gnuman:${MANPATH}"
+  # Prefer Homebrew ruby and GNU coreutils over the macOS ones
+  path=(
+    "$BREW_PREFIX/opt/ruby/bin"
+    "$BREW_PREFIX/lib/ruby/gems/3.0.0/bin"
+    "$BREW_PREFIX/opt/coreutils/libexec/gnubin"
+    $path
+  )
+  export MANPATH="$BREW_PREFIX/opt/coreutils/libexec/gnuman:${MANPATH}"
+fi
 
 # OrbStack command-line tools
 source ~/.orbstack/shell/init.zsh 2>/dev/null || :
