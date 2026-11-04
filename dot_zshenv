@@ -36,6 +36,7 @@ path+=(
   ${N_PREFIX:+$N_PREFIX/bin}(N-/)
   # Go / Dart / Flutter
   ${GOPATH}/bin(N-/)
+  ${HOME}/.cargo/bin(N-/)
   ${HOME}/.pub-cache/bin(N-/)
   ${HOME}/flutter/bin(N-/)
   ${HOME}/flutter/.pub-cache/bin(N-/)
