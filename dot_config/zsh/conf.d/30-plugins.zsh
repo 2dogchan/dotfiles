@@ -12,7 +12,8 @@ zsh_plugin() {
 zsh_plugin zsh-autosuggestions/zsh-autosuggestions.zsh
 zsh_plugin zsh-autopair/autopair.zsh
 zsh_plugin alias-tips/alias-tips.plugin.zsh
-zsh_plugin zsh-auto-notify/auto-notify.plugin.zsh
+# desktop notifications for long commands: macOS, or Linux with a notifier (not on headless servers)
+[[ $OSTYPE == darwin* ]] || (( $+commands[notify-send] )) && zsh_plugin zsh-auto-notify/auto-notify.plugin.zsh
 # syntax highlighting must be sourced last
 zsh_plugin zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 

@@ -6,5 +6,5 @@ Brewfile
 
 {{ if ne .chezmoi.os "darwin" -}}
 # macOS only
-Library/Application Support/abnerworks.Typora/themes/base.user.css
+Library
 {{- end }}
