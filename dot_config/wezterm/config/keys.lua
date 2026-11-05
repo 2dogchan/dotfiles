@@ -161,7 +161,60 @@ cfg.keys = {
 
 	-- Pass keys to nvim
 	keybind(mods.M, { "s" }, act({ SendString = "\x13" })),
+
+	-- 截图贴给远端：框选截图 → 传到当前 pane 连着的 SSH 机器 /tmp → 把远端路径粘贴进来
+	-- （终端只能传文字，Claude Code 收到图片路径会自己读图）。本机 pane 直接粘贴本地路径。
+	keybind(mods.MS, "s", act.EmitEvent("my-screenshot-to-pane")),
 }
+
+-- 找出 pane 连着的 SSH 主机：SSH domain 的 pane，或前台进程是 `ssh <host>`
+local function pane_ssh_host(pane)
+	local domain = pane:get_domain_name() or ""
+	if domain:sub(1, 4) == "SSH:" then
+		return domain:sub(5)
+	end
+	local info = pane:get_foreground_process_info()
+	if not info or not (info.name or ""):match("ssh$") then
+		return nil
+	end
+	-- 跳过带参数的选项（-p 22、-i key、-J jump 等），第一个非选项参数就是主机
+	local takes_value = "bcDEeFIiJLlmOoPpQRSWw"
+	local i = 2
+	while i <= #info.argv do
+		local a = info.argv[i]
+		if a:sub(1, 1) ~= "-" then
+			return a
+		end
+		if #a == 2 and takes_value:find(a:sub(2, 2), 1, true) then
+			i = i + 1
+		end
+		i = i + 1
+	end
+	return nil
+end
+
+wezterm.on("my-screenshot-to-pane", function(win, pane)
+	local name = "shot-" .. os.date("%m%d-%H%M%S") .. ".png"
+	local path = "/tmp/" .. name
+	wezterm.run_child_process({ "/usr/sbin/screencapture", "-i", path })
+	local f = io.open(path, "r")
+	if not f then
+		return -- 按了 Esc 取消
+	end
+	f:close()
+
+	local host = pane_ssh_host(pane)
+	if not host then
+		pane:send_paste(path .. " ")
+		return
+	end
+	local ok, _, err = wezterm.run_child_process({ "/usr/bin/scp", "-q", path, host .. ":/tmp/" .. name })
+	if ok then
+		pane:send_paste("/tmp/" .. name .. " ")
+	else
+		win:toast_notification("截图上传失败", host .. ": " .. (err or ""), nil, 4000)
+	end
+end)
 
 -- Events related to config reloading
 wezterm.on("my-reload-config-with-notify", function(win, pane)
