@@ -196,14 +196,17 @@ end
 wezterm.on("my-screenshot-to-pane", function(win, pane)
 	local name = "shot-" .. os.date("%m%d-%H%M%S") .. ".png"
 	local path = "/tmp/" .. name
-	wezterm.run_child_process({ "/usr/sbin/screencapture", "-i", path })
+	wezterm.log_info("screenshot: 开始截图 " .. path)
+	local cap_ok, _, cap_err = wezterm.run_child_process({ "/usr/sbin/screencapture", "-i", path })
 	local f = io.open(path, "r")
 	if not f then
+		wezterm.log_info("screenshot: 没有生成文件（取消或没有屏幕录制权限） ok=" .. tostring(cap_ok) .. " " .. (cap_err or ""))
 		return -- 按了 Esc 取消
 	end
 	f:close()
 
 	local host = pane_ssh_host(pane)
+	wezterm.log_info("screenshot: 目标主机 " .. tostring(host))
 	if not host then
 		pane:send_paste(path .. " ")
 		return
